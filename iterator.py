@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python
 # iterator.py: Run a command on a list of things
 # Usage:
 #   iterator.py show    - Show config
@@ -13,7 +13,7 @@
 #   Built-in help, editing, configuration
 #   Stores all data and config inside itself!
 #   Self-contained and small, few modules
-#   Requires Python 2.x (I think)
+#   Requires Python 3
 
 # Code
 # ----------------------------------------------------
@@ -37,7 +37,7 @@ def fnData (argName):
 # fnListThings: Simply list things for editing
 def fnListThings (argStart, argLen):
   for iPos, sVal in enumerate (aThings[argStart:argLen]):
-    print " ", iPos, "\t" + sVal;
+    print (" ", iPos, "\t" + sVal);
   return;
 
 # fnInterp: Interpolate (arg) command in (argIndex) Thing
@@ -72,7 +72,7 @@ def fnUpdate (argField, argValue):       # Update field in self
 # ----------------------------------------------------
 def fnShow ():                           # Show config
   print ("Command\t: " + sCommand);
-  print "Things\t:" , " ".join(aThings), "\n";
+  print ("Things\t:" , " ".join(aThings), "\n");
   return;
 
 # Iterate Things, interpolate command, and run
@@ -90,12 +90,14 @@ def fnThings ():                         # Review/edit things
   while (sIn != "S"):
     print ("\nNumber\tThing\n-------\t------------");
     fnListThings (iStart, iPageLen);
-    sIn = raw_input (
+    # Python2 
+    # sIn = raw_input ("\n[A]dd, [D]elete, or [S]ave/quit : ").upper();
+    sIn = input (
       "\n[A]dd, [D]elete, or [S]ave/quit : "
     ).upper();
 
     if (sIn == "A"):                  # Handle additions
-      sNewThing = raw_input (
+      sNewThing = input (
         "\nEnter new Thing, or nothing (to cancel):\n"
       );
       if (len(sNewThing)):               # Nested
@@ -105,13 +107,13 @@ def fnThings ():                         # Review/edit things
         print ("Addition canceled.");
 
     if (sIn == "D"):                  # Deletions
-      iDelete = raw_input (
+      iDelete = input (
         "Enter number to delete, or nothing (to cancel): "
       );
       if (len(iDelete)):              # Safer if blank
          iDelete = int(iDelete);
       if (iDelete >= 0 and iDelete < len(aThings)):
-        print "Thing #", iDelete, "deleted!";
+        print ("Thing #", iDelete, "deleted!");
         aThings.remove (aThings[iDelete]);
       else:
         print ("Error: No such Thing");
@@ -131,7 +133,7 @@ def fnCommand():                         # To edit command
   print ( "On run, each thing replaces _THINGS_. "
     + "\nExamples:\n  ping -c 1 _THINGS_"
     + "\n  cp _THINGS_ /tmp; ls -l /tmp/_THINGS_");
-  sNewCmd = raw_input("\nNew command: ");
+  sNewCmd = input("\nNew command: ");
   if (len(sNewCmd) == 0):                # Abort empty
     sIn = "N";
 
@@ -139,7 +141,7 @@ def fnCommand():                         # To edit command
   print ("New command:\t" + sNewCmd);
   while (sIn != "Y" and sIn != "N"):     # Input loop
     if (sIn == "P" or len(sIn) == 0):
-      sIn = raw_input (
+      sIn = input (
         "Preview:\t"
         + fnInterp (sNewCmd, iPreview % iThings) + "\t\t"
       ).upper();
@@ -185,5 +187,5 @@ eval ("fn" + sMode + "()");
 # Data (no user servicable parts)
 # ----------------------------------------------------
 # MODES Show Run Things Command Help
-# COMMAND clear; echo "Hero #_THINGS_"; /pub/source/brawl/brawl.py _THINGS_; sleep 3;
-# THINGS 63 34 20 27 29 41 46 48 70 77 112 241
+# COMMAND echo "Hero #_THINGS_"; echo /pub/somescript _THINGS_; sleep 1
+# THINGS 63 34 20 27 29 41 46 48 77 112 241
