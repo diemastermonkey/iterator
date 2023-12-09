@@ -6,6 +6,7 @@ This script iterates a list of "things" and runs one or more arbitrary system co
 That's pretty mundane, but here's the fun part: It provides an interface to configure it, and stores this configuration inside itself! 
 Yeah pretty crazy huh? :)
 
+```
 # Example run
 
 # Demonstration of "iterator.py" sample script
@@ -141,3 +142,4 @@ Doing internalsite.corp.com...
 Run complete. Exiting.
 
 [garyd@dizzymouse iterator]$
+```
