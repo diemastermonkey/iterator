@@ -1,3 +1,4 @@
+```
 # Demonstration of "iterator.py" sample script
 # A self-contained general-purpose "Thing Doer"
 # See script source for details.
@@ -129,3 +130,5 @@ Doing internalsite.corp.com...
 
 Run complete. Exiting.
 [garyd@dizzymouse iterator]$
+
+```
