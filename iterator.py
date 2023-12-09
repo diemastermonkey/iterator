@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3 
 # iterator.py: Run a command on a list of things
 # Usage:
 #   iterator.py show    - Show config
@@ -9,7 +9,7 @@
 #
 
 # Notes: 
-#   A sample script by unhacker@gmail.com 
+#   A clever script by unhacker@gmail.com 
 #   Built-in help, editing, configuration
 #   Stores all data and config inside itself!
 #   Self-contained and small, few modules
@@ -187,5 +187,5 @@ eval ("fn" + sMode + "()");
 # Data (no user servicable parts)
 # ----------------------------------------------------
 # MODES Show Run Things Command Help
-# COMMAND echo "Hero #_THINGS_"; echo /pub/somescript _THINGS_; sleep 1
-# THINGS 63 34 20 27 29 41 46 48 77 112 241
+# COMMAND echo "Processing _THINGS_..."; sleep 0.5; echo "Thing _THINGS_ done."
+# THINGS 1 2 4 8 3.14 TwoDuckEggs 127.0.0.1 unhacker@gmail.com
