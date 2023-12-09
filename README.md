@@ -1,10 +1,11 @@
 # iterator
 Self-contained, Python-based general-purpose iterator experiment. 
 
-This script iterates a list of "things" and runs one or more arbitrary system commands on each.
+Iterator iterates a list of "things" and runs one or more arbitrary system commands on each.
 
-That's pretty mundane, but here's the fun part: It provides an interface to configure it, and stores this configuration inside itself! 
-Yeah pretty crazy huh? :)
+Mundane, but here's the cool part: 
+It has a built-in interface to configure it, and stores that configuration inside itself! 
+Pretty crazy huh? :)
 
 ```
 # Example run
