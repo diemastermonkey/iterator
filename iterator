@@ -1,11 +1,11 @@
 #!/usr/bin/python3 
-# iterator.py: Run a command on a list of things
+# iterator: Run a command on a list of things
 # Usage:
-#   iterator.py show    - Show config
-#   iterator.py things  - Edit list of things
-#   iterator.py command - Edit command
-#   iterator.py run     - Execute current config
-#   iterator.py help    - You are reading it
+#   iterator show    - Show config
+#   iterator things  - Edit list of things
+#   iterator command - Edit command
+#   iterator run     - Execute current config
+#   iterator help    - You are reading it
 #
 
 # Notes: 
@@ -17,14 +17,14 @@
 
 # Code
 # ----------------------------------------------------
-import sys;                  # for sys.argv, sys.exit
-import re;                   # for regex
-import os;                   # for exec
+import sys                   # for sys.argv, sys.exit
+import re                    # for regex
+import os                    # for exec
 
-sMode = "help";              # default to help mode
-iThings = 0;                 # Total configured things
-iPageLen = 30;               # Thing paging (unfinished)
-sSelf = "";                  # Else assign before use
+sMode = "help"               # default to help mode
+iThings = 0                  # Total configured things
+iPageLen = 30                # Thing paging (unfinished)
+sSelf = ""                   # Else assign before use
 
 # Functions
 # ----------------------------------------------------
@@ -32,13 +32,13 @@ sSelf = "";                  # Else assign before use
 def fnData (argName):
   return (re.search (
     '^# ' + argName + '.*', sSelf, re.MULTILINE
-  ).group(0).split(' ')[2:]);            # Drop first 2 
+  ).group(0).split(' ')[2:])             # Drop first 2 
 
 # fnListThings: Simply list things for editing
 def fnListThings (argStart, argLen):
   for iPos, sVal in enumerate (aThings[argStart:argLen]):
-    print (" ", iPos, "\t" + sVal);
-  return;
+    print (" ", iPos, "\t" + sVal) 
+  return
 
 # fnInterp: Interpolate (arg) command in (argIndex) Thing
 def fnInterp (argCommand, argIndex):
@@ -47,140 +47,140 @@ def fnInterp (argCommand, argIndex):
       r'_THINGS_', aThings[argIndex],    # Pattern, repl
       argCommand, re.MULTILINE           # Target, opts
     )
-  );                                     # Ed: Drop multiline?
+  )                                      # Ed: Drop multiline?
 
 def fnSelf ():                           # Read self
-  global sSelf;
-  infile = open (sys.argv[0], "r");
-  sSelf = infile.read();
-  infile.close();
-  return;
+  global sSelf
+  infile = open (sys.argv[0], "r")
+  sSelf = infile.read()
+  infile.close()
+  return
 
 def fnUpdate (argField, argValue):       # Update field in self
-  global sSelf;
+  global sSelf
   sNewSelf = re.sub (
     r'# ' + argField + ' .*',            # Pattern to match
     '# ' + argField + ' ' + argValue,    # Replacement
     sSelf, re.MULTILINE|re.DOTALL        # Target, opts
-  );
-  outfile = open (sys.argv[0], "w");     # Note: Truncates file!
-  outfile.write (sNewSelf);              # Crazy, huh?
-  outfile.close();
-  sys.exit(0); 
+  )
+  outfile = open (sys.argv[0], "w")      # Note: Truncates file!
+  outfile.write (sNewSelf)               # Crazy, huh?
+  outfile.close()
+  sys.exit(0)  
 
 # User functions accessed directly by name
 # ----------------------------------------------------
 def fnShow ():                           # Show config
-  print ("Command\t: " + sCommand);
-  print ("Things\t:" , " ".join(aThings), "\n");
-  return;
+  print ("Command\t: " + sCommand)
+  print ("Things\t:" , " ".join(aThings), "\n")
+  return
 
 # Iterate Things, interpolate command, and run
 def fnRun ():
-  print ("Command : " + sCommand + "\n");
+  print ("Command : " + sCommand + "\n")
   for sThing in aThings:
-    os.system (re.sub (r'_THINGS_', sThing, sCommand));
+    os.system (re.sub (r'_THINGS_', sThing, sCommand))
 
-  print ("\nRun complete. Exiting.");
-  return;
+  print ("\nRun complete. Exiting.")
+  return
  
 def fnThings ():                         # Review/edit things
-  sIn = "";
-  iStart = 0;                            # Start page
+  sIn = ""
+  iStart = 0                             # Start page
   while (sIn != "S"):
-    print ("\nNumber\tThing\n-------\t------------");
-    fnListThings (iStart, iPageLen);
+    print ("\nNumber\tThing\n-------\t------------")
+    fnListThings (iStart, iPageLen)
     # Python2 
-    # sIn = raw_input ("\n[A]dd, [D]elete, or [S]ave/quit : ").upper();
+    # sIn = raw_input ("\n[A]dd, [D]elete, or [S]ave/quit : ").upper()
     sIn = input (
       "\n[A]dd, [D]elete, or [S]ave/quit : "
-    ).upper();
+    ).upper()
 
     if (sIn == "A"):                  # Handle additions
       sNewThing = input (
         "\nEnter new Thing, or nothing (to cancel):\n"
-      );
+      )
       if (len(sNewThing)):               # Nested
-        print ("Thing added.");
-        aThings.append(sNewThing);
+        print ("Thing added.")
+        aThings.append(sNewThing)
       else:
-        print ("Addition canceled.");
+        print ("Addition canceled.")
 
     if (sIn == "D"):                  # Deletions
       iDelete = input (
         "Enter number to delete, or nothing (to cancel): "
-      );
+      )
       if (len(iDelete)):              # Safer if blank
-         iDelete = int(iDelete);
+         iDelete = int(iDelete)
       if (iDelete >= 0 and iDelete < len(aThings)):
-        print ("Thing #", iDelete, "deleted!");
-        aThings.remove (aThings[iDelete]);
+        print ("Thing #", iDelete, "deleted!")
+        aThings.remove (aThings[iDelete])
       else:
-        print ("Error: No such Thing");
+        print ("Error: No such Thing")
 
   if (len(aThings) != iThings):              # Done, apply
-    print ("Things updated! Exiting.");
+    print ("Things updated! Exiting.")
     fnUpdate ("THINGS", " ".join(aThings));  # Exits
   else:
-    print ("No changes made. Exiting.");
+    print ("No changes made. Exiting.")
 
   sys.exit(0);                           # Exits
 
 def fnCommand():                         # To edit command
   sIn = "P";                             # Prime as 'preview'
-  iPreview = 0;
+  iPreview = 0
   fnShow();                              # Show current
   print ( "On run, each thing replaces _THINGS_. "
     + "\nExamples:\n  ping -c 1 _THINGS_"
-    + "\n  cp _THINGS_ /tmp; ls -l /tmp/_THINGS_");
-  sNewCmd = input("\nNew command: ");
+    + "\n  cp _THINGS_ /tmp; ls -l /tmp/_THINGS_")
+  sNewCmd = input("\nNew command: ")
   if (len(sNewCmd) == 0):                # Abort empty
-    sIn = "N";
+    sIn = "N"
 
   print ("\nSave? [Y]es, [N]o, or <enter> for next preview.\n"); 
-  print ("New command:\t" + sNewCmd);
+  print ("New command:\t" + sNewCmd)
   while (sIn != "Y" and sIn != "N"):     # Input loop
     if (sIn == "P" or len(sIn) == 0):
       sIn = input (
         "Preview:\t"
         + fnInterp (sNewCmd, iPreview % iThings) + "\t\t"
-      ).upper();
+      ).upper()
     iPreview += 1;             # Modulus, not bounds check
 
   if (sIn == "N"):
-    sys.exit("\nUpdate canceled - exiting with no changes.\n");
+    sys.exit("\nUpdate canceled - exiting with no changes.\n")
 
-  print ("\nConfiguration updated! Exiting.");
-  fnUpdate("COMMAND", sNewCmd);          # Exits
+  print ("\nConfiguration updated! Exiting.")
+  fnUpdate("COMMAND", sNewCmd)           # Exits
 
 def fnHelp ():                           # "Self" help
   print (
     re.search (
       '(^# [\w\s\:\-\.]+)+', sSelf, re.MULTILINE
     ).group(0)
-  );
-  return;
+  )
+  return
 
 # Mainline
 # ----------------------------------------------------
 fnSelf();                                # Always needed
 
 if (len(sys.argv) > 1):                  # Get mode arg
-  sMode = sys.argv[1];
+  sMode = sys.argv[1]
 
-aModes = fnData ("MODES");               # Needed below
-aThings = fnData ("THINGS");
+aModes = fnData ("MODES")                # Needed below
+aThings = fnData ("THINGS")
 iThings = len(aThings);                  # For preview
-sCommand = " ".join (fnData ("COMMAND"));
+sCommand = " ".join (fnData ("COMMAND"))
 
-sMode = sMode[0].upper() + sMode[1:].lower();
+sMode = sMode[0].upper() + sMode[1:].lower()
 if (sMode not in aModes):
-  print (sys.argv[0] + ": Invalid mode " + sMode + "\n");
-  sys.exit(fnHelp());
+  print (sys.argv[0] + ": Invalid mode " + sMode + "\n")
+  sys.exit(fnHelp())
 
 # Simply pass control to handler function
-print ("\nMode\t: " + sMode);
-eval ("fn" + sMode + "()");
+print ("\nMode\t: " + sMode)
+eval ("fn" + sMode + "()")
 
 # End 
 
@@ -188,4 +188,4 @@ eval ("fn" + sMode + "()");
 # ----------------------------------------------------
 # MODES Show Run Things Command Help
 # COMMAND echo "Processing _THINGS_..."; sleep 0.5; echo "Thing _THINGS_ done."
-# THINGS 1 2 4 8 3.14 TwoDuckEggs 127.0.0.1 unhacker@gmail.com
+# THINGS 2 4 8 3.14 TwoDuckEggs 127.0.0.1 unhacker@gmail.com
