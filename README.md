@@ -3,8 +3,8 @@ Self-contained, Python-based general-purpose iterator experiment.
 
 Iterator iterates a list of "things" and runs one or more arbitrary system commands on each.
 
-Mundane. Here's why it's cool:
-It has a built-in configuration interface, and stores the config inside itself.
+Here's why it's cool:
+It has a built-in configuration interface, and stores the config within itself.
 Pretty crazy huh.
 
 ```
